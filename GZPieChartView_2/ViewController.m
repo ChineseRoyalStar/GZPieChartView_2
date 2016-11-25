@@ -22,11 +22,11 @@
     
     self.view.backgroundColor = [UIColor blackColor];
     
-    NSArray *portions = @[@"100",@"100",@"200"];
+    NSArray *portions = @[@"100",@"200",@"300"];
     NSArray *colors = @[[UIColor greenColor],[UIColor yellowColor],[UIColor cyanColor]];
     NSArray *values = @[@"10%",@"10%",@"0个",@"2个"];
     
-    GZPieChartView *pieChartView = [[GZPieChartView alloc]initWithFrame:CGRectMake(0, 0, 400, 300) portions:portions portionColors:colors radius:70 lineWidth:15 values:values];
+    GZPieChartView *pieChartView = [[GZPieChartView alloc]initWithFrame:CGRectMake(0, 0, 400, 300) portions:portions portionColors:colors radius:80 lineWidth:15 values:values];
     
     pieChartView.center = self.view.center;
     

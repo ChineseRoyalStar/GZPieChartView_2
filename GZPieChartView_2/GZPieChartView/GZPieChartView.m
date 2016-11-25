@@ -17,7 +17,7 @@
 #define kDashCornerRadius 20.0f
 
 #define kCATextLayerWidth 60
-#define kCATextLayerHeight 30
+#define kCATextLayerHeight 15
 #define kCATextLayerFontSize 12
 
 #define kItemsTitles @[@"车险分期类",@"消费分期类",@"逾期债权",@"提前还款"]
@@ -200,10 +200,10 @@
         CGFloat radians = self.halfRadianOfPortions[index].floatValue + M_PI_2;
         
         //set stroke color
-        if(index<2) {
+        if(index<self.portionColors.count) {
             CGContextSetStrokeColorWithColor(ctx, self.portionColors[index].CGColor);
         }else {
-            CGContextSetStrokeColorWithColor(ctx, self.portionColors[2].CGColor);
+            CGContextSetStrokeColorWithColor(ctx, self.portionColors[self.portionColors.count-1].CGColor);
         }
         
        if(radians>=0 && radians<M_PI_2) {
@@ -221,7 +221,7 @@
         }else if(radians>=M_PI_2 && radians<M_PI) {
             
             CGFloat pointX = dotCenter.x + kDotCircleRadius*sin(M_PI-M_PI/3.0);
-            CGFloat pointY = dotCenter.y + kDotCircleRadius*cos(M_PI-M_PI/3.0);
+            CGFloat pointY = dotCenter.y - kDotCircleRadius*cos(M_PI-M_PI/3.0);
             pointInCircle = CGPointMake(pointX, pointY);
             
             CGFloat cornerPointX = dotCenter.x + (kDotCircleRadius + kDashCornerRadius)*sin(M_PI-M_PI/3.0);
@@ -277,7 +277,7 @@
     for(int index=0;index<self.dashLineCenters.count;index++) {
         
         CGPoint dashLineCenter = self.dashLineCenters[index].CGPointValue;
-        
+        //create title layers
         CATextLayer *titleTextLayer = [CATextLayer layer];
         titleTextLayer.frame = CGRectMake(0, 0, kCATextLayerWidth, kCATextLayerHeight);
         titleTextLayer.position = CGPointMake(dashLineCenter.x, dashLineCenter.y+kCATextLayerHeight/2.0+3);
@@ -291,11 +291,10 @@
         }
         titleTextLayer.fontSize = kCATextLayerFontSize;
         [self.layer addSublayer:titleTextLayer];
-        
-        
+        //create value layers
         CATextLayer *valueTextLayer = [CATextLayer layer];
         valueTextLayer.frame = CGRectMake(0, 0, kCATextLayerWidth, kCATextLayerHeight);
-        valueTextLayer.position = CGPointMake(dashLineCenter.x, dashLineCenter.y-3.0);
+        valueTextLayer.position = CGPointMake(dashLineCenter.x, dashLineCenter.y-kCATextLayerHeight/2.0-3.0);
         valueTextLayer.alignmentMode = @"center";
         valueTextLayer.string = self.values[index];
         
