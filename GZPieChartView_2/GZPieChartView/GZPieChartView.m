@@ -12,7 +12,15 @@
 #define kOuterCircleIntervalDegree 8.0f
 #define kDotCircleRadius 3.0f
 #define kIncrement 8.0f
+
+#define kDashLineLength 60
 #define kDashCornerRadius 20.0f
+
+#define kCATextLayerWidth 60
+#define kCATextLayerHeight 30
+#define kCATextLayerFontSize 12
+
+#define kItemsTitles @[@"车险分期类",@"消费分期类",@"逾期债权",@"提前还款"]
 #define toDeg(rad) (rad/(M_PI*2)*360)
 #define toRad(deg) ((deg/360.0)*M_PI*2)
 
@@ -28,6 +36,10 @@
 
 @property(nonatomic,strong) NSMutableArray<NSValue *> *dotCircleCenters;
 
+@property(nonatomic,strong) NSMutableArray<NSValue *> *dashLineCenters;
+
+@property(nonatomic,strong) NSArray<NSString *> *values;
+
 @property(nonatomic,assign) CGFloat radius;
 
 @property(nonatomic,assign) CGFloat lineWidth;
@@ -36,7 +48,7 @@
 
 @implementation GZPieChartView
 
-- (instancetype)initWithFrame:(CGRect)frame portions:(NSArray *)portions portionColors:(NSArray *)portionColors radius:(CGFloat)radius lineWidth:(CGFloat)lineWidth {
+- (instancetype)initWithFrame:(CGRect)frame portions:(NSArray *)portions portionColors:(NSArray *)portionColors radius:(CGFloat)radius lineWidth:(CGFloat)lineWidth values:(NSArray *)values{
     
     if(self = [super initWithFrame:frame]) {
         
@@ -45,6 +57,7 @@
         _portionColors = portionColors;
         _radius = radius;
         _lineWidth = lineWidth;
+        _values = values;
         
         [self setup];
     }
@@ -84,9 +97,8 @@
         CGContextDrawPath(ctx, kCGPathStroke);
         
         //calculate half radians of every portion
-        
         if(i==0 || i==1) {
-            CGFloat halfRadians = radiansBetweenStartAngle(startAngle, endAngle);
+            CGFloat halfRadians = radiansBetweenAngles(startAngle, endAngle);
             [self.halfRadianOfPortions addObject:[NSNumber numberWithDouble:halfRadians]];
         }else {
             CGFloat radiansOfParts = startAngle+increment/3.0;
@@ -138,7 +150,6 @@
         
         CGContextSaveGState(ctx);
     }
-    
 }
 
 //draw dots in outer circle
@@ -172,11 +183,12 @@
         CGContextDrawPath(ctx, kCGPathFillStroke);
         CGContextSaveGState(ctx);
     }
-    
 }
 
 //draw dash line for every portion
 - (void)drawDashLineForPortionsInContext:(CGContextRef)ctx {
+    
+    _dashLineCenters = [NSMutableArray array];
     
     for(int index=0;index<self.dotCircleCenters.count;index++) {
         
@@ -196,51 +208,51 @@
         
        if(radians>=0 && radians<M_PI_2) {
             
-            CGFloat pointX = dotCenter.x + kDotCircleRadius*sin(M_PI_4);
-            CGFloat pointY = dotCenter.y - kDotCircleRadius*cos(M_PI_4);
+            CGFloat pointX = dotCenter.x + kDotCircleRadius*sin(M_PI/3.0);
+            CGFloat pointY = dotCenter.y - kDotCircleRadius*cos(M_PI/3.0);
             pointInCircle = CGPointMake(pointX, pointY);
             
-            CGFloat cornerPointX = dotCenter.x + (kDotCircleRadius + kDashCornerRadius)*sin(M_PI_4);
-            CGFloat cornerPointY = dotCenter.y - (kDotCircleRadius + kDashCornerRadius)*cos(M_PI_4);
+            CGFloat cornerPointX = dotCenter.x + (kDotCircleRadius + kDashCornerRadius)*sin(M_PI/3.0);
+            CGFloat cornerPointY = dotCenter.y - (kDotCircleRadius + kDashCornerRadius)*cos(M_PI/3.0);
             cornerPoint = CGPointMake(cornerPointX, cornerPointY);
            
-            endPoint = CGPointMake(cornerPoint.x+50, cornerPoint.y);
+            endPoint = CGPointMake(cornerPoint.x+kDashLineLength, cornerPoint.y);
            
         }else if(radians>=M_PI_2 && radians<M_PI) {
             
-            CGFloat pointX = dotCenter.x + kDotCircleRadius*sin(M_PI_4);
-            CGFloat pointY = dotCenter.y + kDotCircleRadius*cos(M_PI_4);
+            CGFloat pointX = dotCenter.x + kDotCircleRadius*sin(M_PI-M_PI/3.0);
+            CGFloat pointY = dotCenter.y + kDotCircleRadius*cos(M_PI-M_PI/3.0);
             pointInCircle = CGPointMake(pointX, pointY);
             
-            CGFloat cornerPointX = dotCenter.x + (kDotCircleRadius + kDashCornerRadius)*sin(M_PI_4);
-            CGFloat cornerPointY = dotCenter.y + (kDotCircleRadius + kDashCornerRadius)*cos(M_PI_4);
+            CGFloat cornerPointX = dotCenter.x + (kDotCircleRadius + kDashCornerRadius)*sin(M_PI-M_PI/3.0);
+            CGFloat cornerPointY = dotCenter.y - (kDotCircleRadius + kDashCornerRadius)*cos(M_PI-M_PI/3.0);
             cornerPoint = CGPointMake(cornerPointX, cornerPointY);
             
-            endPoint = CGPointMake(cornerPoint.x+50, cornerPoint.y);
+            endPoint = CGPointMake(cornerPoint.x+kDashLineLength, cornerPoint.y);
             
         }else if(radians>=M_PI && radians<M_PI_2*3) {
             
-            CGFloat pointX = dotCenter.x - kDotCircleRadius*sin(M_PI_4);
-            CGFloat pointY = dotCenter.y + kDotCircleRadius*cos(M_PI_4);
+            CGFloat pointX = dotCenter.x + kDotCircleRadius*sin(M_PI/3.0+M_PI);
+            CGFloat pointY = dotCenter.y - kDotCircleRadius*cos(M_PI/3.0+M_PI);
             pointInCircle = CGPointMake(pointX, pointY);
             
-            CGFloat cornerPointX = dotCenter.x - (kDotCircleRadius + kDashCornerRadius)*sin(M_PI_4);
-            CGFloat cornerPointY = dotCenter.y + (kDotCircleRadius + kDashCornerRadius)*cos(M_PI_4);
+            CGFloat cornerPointX = dotCenter.x + (kDotCircleRadius + kDashCornerRadius)*sin(M_PI/3.0+M_PI);
+            CGFloat cornerPointY = dotCenter.y - (kDotCircleRadius + kDashCornerRadius)*cos(M_PI/3.0+M_PI);
             cornerPoint = CGPointMake(cornerPointX, cornerPointY);
             
-            endPoint = CGPointMake(cornerPoint.x-50, cornerPoint.y);
+            endPoint = CGPointMake(cornerPoint.x-kDashLineLength, cornerPoint.y);
             
         }else {
             
-            CGFloat pointX = dotCenter.x - kDotCircleRadius*sin(M_PI_4);
-            CGFloat pointY = dotCenter.y - kDotCircleRadius*cos(M_PI_4);
+            CGFloat pointX = dotCenter.x + kDotCircleRadius*sin(-M_PI/3.0);
+            CGFloat pointY = dotCenter.y - kDotCircleRadius*cos(-M_PI/3.0);
             pointInCircle = CGPointMake(pointX, pointY);
             
-            CGFloat cornerPointX = dotCenter.x - (kDotCircleRadius + kDashCornerRadius)*sin(M_PI_4);
-            CGFloat cornerPointY = dotCenter.y - (kDotCircleRadius + kDashCornerRadius)*cos(M_PI_4);
+            CGFloat cornerPointX = dotCenter.x + (kDotCircleRadius + kDashCornerRadius)*sin(-M_PI/3.0);
+            CGFloat cornerPointY = dotCenter.y - (kDotCircleRadius + kDashCornerRadius)*cos(-M_PI/3.0);
             cornerPoint = CGPointMake(cornerPointX, cornerPointY);
             
-            endPoint = CGPointMake(cornerPoint.x-50, cornerPoint.y);
+            endPoint = CGPointMake(cornerPoint.x-kDashLineLength, cornerPoint.y);
         }
         
         CGFloat lengths[] = {4,4};
@@ -253,10 +265,49 @@
         CGContextMoveToPoint(ctx, cornerPoint.x, cornerPoint.y);
         CGContextAddLineToPoint(ctx,endPoint.x, endPoint.y);
         CGContextStrokePath(ctx);
+        
+        [self.dashLineCenters addObject:[NSValue valueWithCGPoint:midpointBetweenPoints(cornerPoint, endPoint)]];
     }
     
+    [self addTextLayer];
 }
 
+- (void)addTextLayer {
+    
+    for(int index=0;index<self.dashLineCenters.count;index++) {
+        
+        CGPoint dashLineCenter = self.dashLineCenters[index].CGPointValue;
+        
+        CATextLayer *titleTextLayer = [CATextLayer layer];
+        titleTextLayer.frame = CGRectMake(0, 0, kCATextLayerWidth, kCATextLayerHeight);
+        titleTextLayer.position = CGPointMake(dashLineCenter.x, dashLineCenter.y+kCATextLayerHeight/2.0+3);
+        titleTextLayer.alignmentMode = @"center";
+        titleTextLayer.string = kItemsTitles[index];
+        
+        if(index<self.portionColors.count) {
+            titleTextLayer.foregroundColor = self.portionColors[index].CGColor;
+        }else {
+            titleTextLayer.foregroundColor = self.portionColors[self.portionColors.count-1].CGColor;
+        }
+        titleTextLayer.fontSize = kCATextLayerFontSize;
+        [self.layer addSublayer:titleTextLayer];
+        
+        
+        CATextLayer *valueTextLayer = [CATextLayer layer];
+        valueTextLayer.frame = CGRectMake(0, 0, kCATextLayerWidth, kCATextLayerHeight);
+        valueTextLayer.position = CGPointMake(dashLineCenter.x, dashLineCenter.y-3.0);
+        valueTextLayer.alignmentMode = @"center";
+        valueTextLayer.string = self.values[index];
+        
+        if(index<self.portionColors.count) {
+            valueTextLayer.foregroundColor = self.portionColors[index].CGColor;
+        }else {
+            valueTextLayer.foregroundColor = self.portionColors[self.portionColors.count-1].CGColor;
+        }
+        valueTextLayer.fontSize = kCATextLayerFontSize;
+        [self.layer addSublayer:valueTextLayer];
+    }
+}
 
 //create percent of every portions
 - (void)calculatePercentsOfPortions {
@@ -281,8 +332,15 @@
     return CGPointMake(self.frame.size.width/2.0, self.frame.size.height/2.0);
 }
 
-static inline CGFloat radiansBetweenStartAngle(CGFloat startAngle,CGFloat endAngle) {
+static inline CGFloat radiansBetweenAngles(CGFloat startAngle,CGFloat endAngle) {
     return startAngle + (endAngle - startAngle)/2.0;
+}
+
+static inline CGPoint midpointBetweenPoints(CGPoint start, CGPoint end) {
+    
+    CGFloat midPointX = start.x + (end.x - start.x)/2;
+    CGFloat midPointY = start.y + (end.y - start.y)/2;
+    return CGPointMake(midPointX, midPointY);
 }
 
 @end

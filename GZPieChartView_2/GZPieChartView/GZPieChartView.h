@@ -14,12 +14,12 @@
  * @brief intializer
  * @param frame Origin and size of GZPieChartView
  * @param portions Values of portions
- * @param portionColors Colors of portions
+ * @param portionColors Colors of portions.Default is black.
  * @param radius Radius of pie view
  * @param lineWidth LineWidth of stroke
- * @return Instance of GZPieChartView
+ * @return An instance of GZPieChartView
  */
 
-- (instancetype)initWithFrame:(CGRect)frame portions:(NSArray *)portions portionColors:(NSArray *)portionColors radius:(CGFloat)radius lineWidth:(CGFloat)lineWidth;
+- (instancetype)initWithFrame:(CGRect)frame portions:(NSArray *)portions portionColors:(NSArray *)portionColors radius:(CGFloat)radius lineWidth:(CGFloat)lineWidth values:(NSArray *)values;
 
 @end
