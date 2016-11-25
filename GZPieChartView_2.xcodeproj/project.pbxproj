@@ -13,6 +13,7 @@
 		22F1F0661DE7C42800CE8D05 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 22F1F0641DE7C42800CE8D05 /* Main.storyboard */; };
 		22F1F0681DE7C42800CE8D05 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 22F1F0671DE7C42800CE8D05 /* Assets.xcassets */; };
 		22F1F06B1DE7C42800CE8D05 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 22F1F0691DE7C42800CE8D05 /* LaunchScreen.storyboard */; };
+		22F1F0751DE7C56100CE8D05 /* GZPieChartView.m in Sources */ = {isa = PBXBuildFile; fileRef = 22F1F0741DE7C56100CE8D05 /* GZPieChartView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +27,8 @@
 		22F1F0671DE7C42800CE8D05 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		22F1F06A1DE7C42800CE8D05 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		22F1F06C1DE7C42800CE8D05 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		22F1F0731DE7C56100CE8D05 /* GZPieChartView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GZPieChartView.h; sourceTree = "<group>"; };
+		22F1F0741DE7C56100CE8D05 /* GZPieChartView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GZPieChartView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +61,7 @@
 		22F1F05A1DE7C42800CE8D05 /* GZPieChartView_2 */ = {
 			isa = PBXGroup;
 			children = (
+				22F1F0721DE7C44400CE8D05 /* GZPieChartView */,
 				22F1F05E1DE7C42800CE8D05 /* AppDelegate.h */,
 				22F1F05F1DE7C42800CE8D05 /* AppDelegate.m */,
 				22F1F0611DE7C42800CE8D05 /* ViewController.h */,
@@ -77,6 +81,15 @@
 				22F1F05C1DE7C42800CE8D05 /* main.m */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		22F1F0721DE7C44400CE8D05 /* GZPieChartView */ = {
+			isa = PBXGroup;
+			children = (
+				22F1F0731DE7C56100CE8D05 /* GZPieChartView.h */,
+				22F1F0741DE7C56100CE8D05 /* GZPieChartView.m */,
+			);
+			path = GZPieChartView;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -150,6 +163,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				22F1F0751DE7C56100CE8D05 /* GZPieChartView.m in Sources */,
 				22F1F0631DE7C42800CE8D05 /* ViewController.m in Sources */,
 				22F1F0601DE7C42800CE8D05 /* AppDelegate.m in Sources */,
 				22F1F05D1DE7C42800CE8D05 /* main.m in Sources */,

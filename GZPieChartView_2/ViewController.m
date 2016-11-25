@@ -8,6 +8,8 @@
 
 #import "ViewController.h"
 
+#import "GZPieChartView.h"
+
 @interface ViewController ()
 
 @end
@@ -17,6 +19,17 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
+    
+    self.view.backgroundColor = [UIColor blackColor];
+    
+    NSArray *portions = @[@"100",@"100",@"200"];
+    NSArray *colors = @[[UIColor greenColor],[UIColor yellowColor],[UIColor cyanColor]];
+    
+    GZPieChartView *pieChartView = [[GZPieChartView alloc]initWithFrame:CGRectMake(0, 0, 300, 300) portions:portions portionColors:colors radius:70 lineWidth:15];
+    
+    pieChartView.center = self.view.center;
+    
+    [self.view addSubview:pieChartView];
 }
 
 
